@@ -1,0 +1,61 @@
+{
+  "plumbers": [
+    {
+      "id": 1,
+      "name": "Maude"
+    },
+    {
+      "id": 2,
+      "name": "Merle"
+    }
+  ],
+  "completions": [
+    {
+      "requestId": 2,
+      "plumberId": 1,
+      "date_created": 1652728854927,
+      "id": 1
+    },
+    {
+      "requestId": 2,
+      "plumberId": 2,
+      "date_created": 1652728860209,
+      "id": 2
+    },
+    {
+      "requestId": 3,
+      "plumberId": 1,
+      "date_created": 1652728870958,
+      "id": 3
+    },
+    {
+      "requestId": 4,
+      "plumberId": 1,
+      "date_created": 1652728901594,
+      "id": 4
+    }
+  ],
+  "requests": [
+    {
+      "description": "Fix my plumbing",
+      "address": "101 one two three street",
+      "budget": "9000000",
+      "neededBy": "2022-05-16",
+      "id": 2
+    },
+    {
+      "description": "Seriously, Fix my plumbing",
+      "address": "123 456th St",
+      "budget": "789",
+      "neededBy": "2022-05-19",
+      "id": 3
+    },
+    {
+      "description": "For Real This Time! My plumbing is jacked up! FIX IT!!!",
+      "address": "987 65th Ave",
+      "budget": "4321",
+      "neededBy": "2022-06-01",
+      "id": 4
+    }
+  ]
+}

@@ -98,3 +98,7 @@ export const fetchCompletions = () => {
             }
         )
 }
+
+export const getCompletions = () => {
+    return applicationState.completions.map(completion => ({...completion}))
+}

@@ -1,44 +1,50 @@
-import { deleteRequest, fetchCompletions, fetchPlumbers, fetchRequests } from "./dataAccess.js"
-import { SinkRepair } from "./SinkRepair.js"
+import {
+  deleteRequest,
+  fetchCompletions,
+  fetchPlumbers,
+  fetchRequests,
+} from "./dataAccess.js";
+import { SinkRepair } from "./SinkRepair.js";
+// --- ^^ import functions from other modules ^^ --- //
 
-/* ^^ import functions from other modules ^^ */
 
-/* asign main element to a variable */
+// --- query selector (main container) --- //
+const mainContainer = document.querySelector("#container");
 
-const mainContainer = document.querySelector("#container")
 
-/* renders all HTML to the DOM */
+// --- function (DOM rendering) --- //
 const render = () => {
-    fetchRequests()
+  fetchRequests()
     .then(() => fetchPlumbers())
     .then(() => fetchCompletions())
-    .then(       // call this function, then...
-        () => {
-            mainContainer.innerHTML = SinkRepair()      // ...render HTML from this function
-        }
-    )
-}
+    .then(() => {
+      mainContainer.innerHTML = SinkRepair();
+    });
+};
+
+// --- function Call (DOM Rendering) //
+render();
 
 
-render()        // function call
+/* ===>  ===> EVENT LISTENERS ===>  ===> */
 
-/* main element event listener (render HTML again)*/
+
+// --- (state changed) --- //
 mainContainer.addEventListener(
-    "stateChanged",     // custum event (look in dataAccess.js)
-    customEvent => {
-        render()        //re-calls function
-    }
-)
+  "stateChanged", 
+  (customEvent) => {
+    render(); 
+  }
+);
 
-/* click event listener (deletes request from database on click) */
-mainContainer.addEventListener(
-    'click',
-    (clickEvent) => {
-        const clickedItem = clickEvent.target
-        if (clickedItem.id.startsWith('request--')) {
-           const [, requestId] = clickedItem.id.split("--")
 
-           deleteRequest(parseInt(requestId))
-        }
-    }
-)
+// --- (delete buttons) --- //
+mainContainer.addEventListener("click", (clickEvent) => {
+  const clickedItem = clickEvent.target;
+  if (clickedItem.id.startsWith("request--")) {
+    const [, requestId] = clickedItem.id.split("--");
+
+    deleteRequest(parseInt(requestId));
+  }
+});
+/* END */

@@ -4,31 +4,36 @@ import {
   getRequests,
   saveCompletions,
 } from "./dataAccess.js";
-/* ^^ import function from other module ^^ */
+// --- ^^ import function from other module ^^ --- //
 
-/* export HTML to other module */
+/* ===> ===> FUNCTIONS ===> ===> */
+
+// --- function (build 'Service Requests' HTML => export to main.js) --- //
 export const Requests = () => {
-  const requests = isCompleted(); /* assign getter function to variable */
+  // --- get data from application state --- //
+  const requests = isCompleted();
   const plumbers = getPlumbers();
 
-  /* build HTML */
+  // --- build HTML --- //
 
   let html = `
         <ul>
             ${requests
               .map((request) => {
+                // --- iterate requests --- //
                 if (request.isCompleted === false) {
+                  // --- check if completed --- //
                   return `
                     <li>
                         ${request.description}
                         ${plumberSelect(request, plumbers)}  
-                    </li>`;
+                    </li>`; // --- ^^ if not completed ^^ --- //
                 } else {
                   return `
                     <li style="background: #FF7F7F">
                         ${request.description}
                         ${plumberSelect(request, plumbers)}  
-                    </li>`;
+                    </li>`; // --- ^^ if completed ^^ --- //
                 }
               })
               .join("")}
@@ -37,38 +42,13 @@ export const Requests = () => {
   return html;
 };
 
-/* assign main container to variable (same as on main.js) */
-const mainContainer = document.querySelector("#container");
-
-mainContainer.addEventListener("change", (event) => {
-  if (event.target.id === "plumbers") {
-    const [requestId, plumberId] = event.target.value.split("--");
-
-    /*
-                This object should have 3 properties
-                   1. requestId
-                   2. plumberId
-                   3. date_created
-            */
-    const completion = {
-      requestId: parseInt(requestId),
-      plumberId: parseInt(plumberId),
-      date_created: Date.now(),
-    };
-
-    saveCompletions(completion);
-    /*
-                Invoke the function that performs the POST request
-                to the `completions` resource for your API. Send the
-                completion object as a parameter.
-             */
-  }
-});
-
+// --- funtion (sorts request by completion status) --- //
 const isCompleted = () => {
+  // --- get data from application state --- //
   const requests = getRequests();
   const completions = getCompletions();
 
+  // --- change 'isCompleted' property of requests --- //
   requests.forEach((request) => {
     const foundCompletion = completions.find(
       (completion) => completion.requestId === request.id
@@ -78,13 +58,16 @@ const isCompleted = () => {
     }
   });
 
+  // --- sort requests by completion status --- //
   requests.sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted));
 
   return requests;
 };
 
+// --- function (creates plumber selection and delete button based on completion status) --- //
 const plumberSelect = (request, plumbers) => {
   if (request.isCompleted === false) {
+    // --- create plumber selection for outstanding requests --- //
     return `<select class="plumbers" id="plumbers">
         <option value="">Choose</option>
         ${plumbers
@@ -99,6 +82,7 @@ const plumberSelect = (request, plumbers) => {
                             Delete
                         </button>`;
   } else {
+    // ---  show completing plumber's name for completed request --- //
     const completions = getCompletions();
     const completedRequest = completions.find(
       (completion) => completion.requestId === request.id
@@ -110,3 +94,25 @@ const plumberSelect = (request, plumbers) => {
     return `completed by ${servicingPlumber.name}`;
   }
 };
+/* END */
+
+// --- query selector (main container) --- //
+const mainContainer = document.querySelector("#container");
+
+// --- event listener (plumber selection) --- //
+mainContainer.addEventListener("change", (event) => {
+  if (event.target.id === "plumbers") {
+    // --- split id into two variables --- //
+    const [requestId, plumberId] = event.target.value.split("--");
+
+    // --- save variables in new object --- //
+    const completion = {
+      requestId: parseInt(requestId),
+      plumberId: parseInt(plumberId),
+      date_created: Date.now(),
+    };
+
+    // --- send object to API --- //
+    saveCompletions(completion);
+  }
+});

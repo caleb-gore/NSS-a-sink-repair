@@ -1,8 +1,8 @@
 import { ServiceForm } from "./ServiceForm.js"
 import { Requests } from "./Requests.js"
-/* ^^ import functions from modules ^^ */
+// --- ^^ import functions from modules ^^ --- //
 
-/* call imported functions and export HTML to main.js */
+// --- function (build site HTML => export to main.js) --- //
 export const SinkRepair = () => {
     return `
         <h1>Maude and Merle's Sink Repair</h1>

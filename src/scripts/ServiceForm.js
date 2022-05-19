@@ -1,13 +1,10 @@
-import { sendRequest } from "./dataAccess.js"
-/* ^^ import function from other module ^^ */
+import { sendRequest } from "./dataAccess.js";
+// --- ^^ import function from other module ^^ --- //
 
-/* Export HTML to other module */
+// --- function (build form HTML => export to main.js) --- //
 export const ServiceForm = () => {
-
-    /* build HTML */
-
-    let html = `
-        <div class="field">
+  let html = `
+        <div class="field"> 
             <label class="label" for="serviceDescription">Description</label>
             <input type="text" name="serviceDescription" class="input" />
         </div>
@@ -25,35 +22,38 @@ export const ServiceForm = () => {
         </div>
 
         <button class="button" id="submitRequest">Submit Request</button>
-    `
+    `;
+  return html;
+};
 
-    return html
-}
+// --- query selector (main container) --- //
+const mainContainer = document.querySelector("#container");
 
+// --- event listener ('Submit Request' button) --- //
+mainContainer.addEventListener("click", (clickEvent) => {
+  if (clickEvent.target.id === "submitRequest") {
+    // --- get form input values --- //
+    const userDescription = document.querySelector(
+      "input[name='serviceDescription']"
+    ).value;
+    const userAddress = document.querySelector(
+      "input[name='serviceAddress']"
+    ).value;
+    const userBudget = document.querySelector(
+      "input[name='serviceBudget']"
+    ).value;
+    const userDate = document.querySelector("input[name='serviceDate']").value;
 
-const mainContainer = document.querySelector("#container")   /* assign element with id 'container' to a variable */
+    // --- save values to new object --- //
+    const dataToSendToAPI = {
+      description: userDescription,
+      address: userAddress,
+      budget: userBudget,
+      neededBy: userDate,
+      isCompleted: false,
+    };
 
-/* click event listener */
-
-mainContainer.addEventListener("click", clickEvent => {
-    if (clickEvent.target.id === "submitRequest") {   /* listening for click on 'Submit Request' button */
-        /*  Get what the user typed into the form fields */
-        const userDescription = document.querySelector("input[name='serviceDescription']").value
-        const userAddress = document.querySelector("input[name='serviceAddress']").value
-        const userBudget = document.querySelector("input[name='serviceBudget']").value
-        const userDate = document.querySelector("input[name='serviceDate']").value
-
-        /*  Make an object out of the user input */
-        const dataToSendToAPI = {
-            description: userDescription,
-            address: userAddress,
-            budget: userBudget,
-            neededBy: userDate,
-            isCompleted: false
-        }
-
-        /* Send the data to the API for permanent storage */
-        sendRequest(dataToSendToAPI)
-    }
-})
-
+    // --- send values to API --- //
+    sendRequest(dataToSendToAPI);
+  }
+});
